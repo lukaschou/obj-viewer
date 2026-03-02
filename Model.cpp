@@ -1,5 +1,11 @@
 #include "Model.h"
 #include <iostream>
+#include <tuple>
+#include <unordered_map>
+
+inline void hash_combine(std::size_t& seed, int v) {
+        seed ^= std::hash<int>{}(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
 
 Model::Model(
         std::vector<float> vertices,
@@ -7,9 +13,24 @@ Model::Model(
         std::vector<float> texCoords,
         std::vector<FaceElement> elements
 ) : vertices(vertices) {
-    for (int f { 0 } ; f < elements.size() / 3; f++) {
-        
-    }
+    typedef std::tuple<int, int, int> vertex_t;
+    struct vertex_hash {
+        std::size_t operator()(const vertex_t& v) const {
+        std::size_t seed = 0;
+            hash_combine(seed, std::get<0>(v));
+            hash_combine(seed, std::get<1>(v));
+            hash_combine(seed, std::get<2>(v));
+            return seed;
+        }
+    };
+    typedef std::unordered_map<const vertex_t,int,vertex_hash> vertex_map_t;
+    vertex_map_t seen {};
+    std::vertex<float> vertices {};
+    std::vertex<int> indices {};
+
+
+    
+
     // Later, this will zip all attributes together
     for (const auto& element : elements) {
         indices.push_back(element.vertexIndex); 
