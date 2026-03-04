@@ -25,11 +25,8 @@ Model::Model(
     };
     typedef std::unordered_map<const vertex_t,int,vertex_hash> vertex_map_t;
     vertex_map_t seen {};
-    std::vertex<float> vertices {};
-    std::vertex<int> indices {};
-
-
-    
+    std::vector<float> verts {};
+    std::vector<int> indices {};
 
     // Later, this will zip all attributes together
     for (const auto& element : elements) {
