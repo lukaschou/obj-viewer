@@ -28,12 +28,25 @@ Model::Model(
     std::vector<float> verts {};
     std::vector<int> indices {};
 
-    // Later, this will zip all attributes together
-    for (const auto& element : elements) {
-        indices.push_back(element.vertexIndex); 
-        std::cout << "Vertex: " << element.vertexIndex << std::endl;
-        std::cout << "Texture: " << element.vertexIndex << std::endl;
+    for (int i {}; i < elements.size() / 3; i++) {
+        FaceElement f1 = elements[i * 3];
+        FaceElement f2 = elements[i * 3 + 1];
+        FaceElement f3 = elements[i * 3 + 2];
+
+        for (const auto& element : {f1, f2, f3}) {
+            int vertexIndex = element.vertexIndex;
+            int textureIndex = element.vertexIndex;
+            int normalIndex = element.normalIndex;
+
+            vertex_t vertex = std::make_tuple(vertexIndex, textureIndex, normalIndex);
+            if (seen.find(vertex) != seen.end()) {
+                // append index
+            } else {
+                // insert into VBO + append index
+            }
+        }
     }
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(2, VBOs);
     glGenBuffers(1, &EBO);
